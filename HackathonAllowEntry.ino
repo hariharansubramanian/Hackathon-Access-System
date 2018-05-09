@@ -11,6 +11,7 @@ int RED_LED_4 = 13;
 char isLoveProgramming;
 char isParticipating;
 char isOrganizing;
+char isSolveCodePuzzle;
 
 void setup() {
   pinMode(6, OUTPUT);
@@ -44,6 +45,21 @@ void loop() {
   Serial.println(isParticipating);
   Serial.println("\n");
 
+  Serial.println("Do you want to attempt a code puzzle?(y/n)[optional]");
+  while (Serial.available() == 0) { }
+  isSolveCodePuzzle = Serial.read();
+  Serial.println(isSolveCodePuzzle);
+  if (isSolveCodePuzzle == 'Y' || isSolveCodePuzzle == 'y') {
+    doCodeChallenge();
+    handleAccess();
+  } else {
+    Serial.println("\nThats alright :) maybe next time!");
+    handleAccess();
+  }
+}
+
+
+void handleAccess() {
   if (isLoveProgramming == 'Y'
       || isLoveProgramming == 'y'
       || isParticipating == 'Y'
@@ -56,14 +72,35 @@ void loop() {
   }
 }
 
+void doCodeChallenge() {
 
+  Serial.println("\n----------WHAT IS THE PRINT OUTPUT?----------");
+  Serial.println("\n  int x = 10;");
+  Serial.println("  int y = 10;");
+  Serial.println("  if( !(x^y) )");
+  Serial.println("    printf(\"x is equal to y\");");
+  Serial.println("  else");
+  Serial.println("    printf(\"x is not equal to y\");");
+
+  Serial.println("\n----------ANSWER CHOICES----------");
+  Serial.println("Enter \"1\" for: \"x is equal to y\"");
+  Serial.println("Enter \"2\" for: \"x is not equal to y\"");
+
+  while (Serial.available() == 0) { }
+  char codePuzzleAnswer = Serial.read();
+  if (codePuzzleAnswer == '1') {
+    Serial.println("\nSPOT ON! Right answer!\n");
+  } else {
+    Serial.println("\nSORRY! Wrong answer!\n");
+  }
+}
 void grantEntry() {
   ClearRedLED();
   digitalWrite(6, HIGH);
   digitalWrite(7, HIGH);
   digitalWrite(8, HIGH);
   digitalWrite(9, HIGH);
-  Serial.println("----------ACCESS GRANTED!!----------\nYou are worthy to enter!\n\n");
+  Serial.println("\n----------ACCESS GRANTED!!----------\nYou are worthy to enter!\n\n");
 }
 
 void denyEntry() {
@@ -72,7 +109,7 @@ void denyEntry() {
   digitalWrite(11, HIGH);
   digitalWrite(12, HIGH);
   digitalWrite(13, HIGH);
-  Serial.println("----------ACCESS DENIED!!----------\nBoo-hoo..go back home!\n\n");
+  Serial.println("\n----------ACCESS DENIED!!----------\nBoo-hoo..GO BACK HOME!!\n\n");
 }
 
 
