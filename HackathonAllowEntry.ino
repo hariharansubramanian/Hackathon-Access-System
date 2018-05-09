@@ -9,6 +9,8 @@ int RED_LED_3 = 12;
 int RED_LED_4 = 13;
 
 char isLoveProgramming;
+char isParticipating;
+char isOrganizing;
 
 void setup() {
   pinMode(6, OUTPUT);
@@ -21,41 +23,56 @@ void setup() {
   pinMode(13, OUTPUT);
 
   Serial.begin(9600);
-  Serial.println("Do you Love Programming?(y/n)");
-
 }
 
 void loop() {
+  Serial.println("Were you part of the organizing team for today's Hack-a-thon?(y/n)");
   while (Serial.available() == 0) { }
+  isOrganizing = Serial.read();
+  Serial.println(isOrganizing);
+  Serial.println("\n");
 
+  Serial.println("Do you Love writing code?(y/n)");
+  while (Serial.available() == 0) { }
   isLoveProgramming = Serial.read();
-  if (isLoveProgramming == 'Y' || isLoveProgramming == 'y') {
-    isAllowEntry();
-  } else {
-    isNotAllowedEntry();
-  }
+  Serial.println(isLoveProgramming);
+  Serial.println("\n");
 
+  Serial.println("Are you participating in today's Hack-a-thon?(y/n)");
+  while (Serial.available() == 0) { }
+  isParticipating = Serial.read();
+  Serial.println(isParticipating);
+  Serial.println("\n");
+
+  if (isLoveProgramming == 'Y'
+      || isLoveProgramming == 'y'
+      || isParticipating == 'Y'
+      || isParticipating == 'y'
+      || isOrganizing == 'Y'
+      || isOrganizing == 'y') {
+    grantEntry();
+  } else {
+    denyEntry();
+  }
 }
 
 
-void isAllowEntry() {
+void grantEntry() {
   ClearRedLED();
   digitalWrite(6, HIGH);
   digitalWrite(7, HIGH);
   digitalWrite(8, HIGH);
   digitalWrite(9, HIGH);
-  Serial.println("ACCESS GRANTED!, You are worthy to participate in today's Hackathon!");
-   Serial.println("Do you Love Programming?(y/n)");
+  Serial.println("----------ACCESS GRANTED!!----------\nYou are worthy to enter!\n\n");
 }
 
-void isNotAllowedEntry() {
+void denyEntry() {
   ClearGreenLED();
   digitalWrite(10, HIGH);
   digitalWrite(11, HIGH);
   digitalWrite(12, HIGH);
   digitalWrite(13, HIGH);
-  Serial.println("ACCESS DENIED!, Boo-hoo..go back home!");
-   Serial.println("Do you Love Programming?(y/n)");
+  Serial.println("----------ACCESS DENIED!!----------\nBoo-hoo..go back home!\n\n");
 }
 
 
